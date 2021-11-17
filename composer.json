@@ -1,0 +1,13 @@
+{
+    "name": "korcsmaroskristof/rajzfilmek",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Korcsmaroskristof\\Rajzfilmek\\": "src/"
+        }
+    },
+    "require": {
+        "slim/slim": "^4.8",
+        "slim/psr7": "^1.4"
+    }
+}

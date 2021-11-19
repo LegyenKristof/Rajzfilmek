@@ -2,6 +2,8 @@
 
 namespace Korcsmaroskristof\Rajzfilmek;
 
+use Exception;
+
 class Rajzfilm{
     public $id;
     public $cim;
@@ -13,6 +15,33 @@ class Rajzfilm{
         $this->cim = $attr['cim'] ?? $this->cim;
         $this->hossz = $attr['hossz'] ?? $this->hossz;
         $this->kiadasi_ev = $attr['kiadasi_ev'] ?? $this->kiadasi_ev;
+    }
+
+    public function torles(){
+        if($this->id == null){
+            throw new Exception("null ID");
+        }
+
+        global $db;
+
+        $stmt = $db->prepare("DELETE FROM rajzfilmek WHERE id = :id");
+        $stmt->execute([":id" => $this->id]);
+
+        if($stmt->rowCount() != 1){
+            throw new Exception("Nincs ilyen rekord");
+        }         
+    }
+
+    public static function getById(int $id) : ?Rajzfilm {
+        global $db;
+        $stmt = $db->prepare("SELECT * FROM rajzfilmek WHERE id = :id");
+        $stmt->execute([":id" => $id]);
+        if($stmt->rowCount() != 1){
+            return null;
+        }
+        $rajzfilm = new Rajzfilm();
+        $rajzfilm->setAttributes($stmt->fetchAll()[0]);
+        return $rajzfilm;
     }
 
     public static function osszes() : array {
